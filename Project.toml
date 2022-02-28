@@ -3,6 +3,9 @@ uuid = "59329d5d-8742-42cc-b60b-014e218386a9"
 authors = ["Kyando2 <amehikoji@gmail.com> and contributors"]
 version = "0.1.0"
 
+[deps]
+Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
+
 [compat]
 julia = "1"
 
