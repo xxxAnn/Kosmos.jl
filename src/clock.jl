@@ -11,7 +11,7 @@ end
 function Clock(f::Function; tick::Float64=100.0) # default to 100hz
     if tick>1000.0 error("Tick must be below 1000hz") end
     c = Clock(now(), Millisecond(0), Millisecond(0), tick, 1000.0/tick, f) 
-    fetch(@spawn begin 
+    @spawn begin 
         clock_running = true
         count = 0
         @sync while clock_running 
@@ -24,5 +24,5 @@ function Clock(f::Function; tick::Float64=100.0) # default to 100hz
                 c._last = c.delta
             end
         end
-    end)
+    end
 end
