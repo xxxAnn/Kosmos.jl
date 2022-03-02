@@ -19,13 +19,12 @@ Kosmo() = Kosmo(ComponentPool(), Vector())
 function run_systems(k::Kosmo) 
     for sys in k._system_pool 
         for r in sys._raw
-            # These are probably ordered?
+            # These are ordered
             args = [k._component_pool[x] for x in r] 
             sys._f(args...)
         end
     end
 end
-
 
 function add!(k::Kosmo, cmp::Component)
     c = k._component_pool
