@@ -1,8 +1,9 @@
-macro system(k::Symbol, f::Expr) # k should be a Kosmo (TODO: EXPLICITY ERROR OTHERWISE)
-    _, args = inspect_func(f)
-    argtypes = find_argtypes(args)
-    quote
-        $f
-        push!(($k)._dispatch_types, $argtypes)
-    end
+function system!(f::Function, k::Kosmo)
+    type_tup = func_types(f)
+    k._dispatch_index[type_tup] = f
 end
+
+"""
+Returns the Function's argument types in order.
+"""
+func_types(f::Function) = Tuple(first(methods(f)).sig.types[2:end]) 
