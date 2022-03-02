@@ -1,11 +1,14 @@
 module Kosmos
 
+using Dates, Distributed
+
 export Component,
     system,
-    Kosmo
+    Kosmo,
+    Clock
 
 include("component.jl")
-
+include("clock.jl")
 # TODO: move type definitions to a separate folder
 struct Kosmo 
     _dispatch_index::Dict{Tuple, Function} #// Raw dispatch entries
