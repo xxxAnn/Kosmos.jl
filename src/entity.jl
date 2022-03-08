@@ -3,7 +3,7 @@ struct Entity
 end
 function Entity!(k::Kosmo, args...) 
     v = Vector{Int}()
-    for arg in args 
+    for arg in args 3
         push!(v, add!(k, arg))
     end
     Entity(v)
