@@ -8,8 +8,10 @@ export Component,
     Clock
 
 include("component.jl")
+include("entity.jl")
 include("clock.jl")
 include("kosmo.jl")
 include("system.jl")
+include("smartlock.jl")
 
 end
