@@ -33,7 +33,11 @@ function indexify(v::Vector{Component})
     a
 end
 
-firstelem(a::Any) = try first(a) catch return a end
+function inferargpairs(v::Vector{Component}) # -> Vector{Tuple}
+
+end
+
+firstelem(a::Any) = try first(a) catch; return a end
 #+------------------------------------------------------+
 #| This is the main idea                                |
 #| Combinations are only generated if needed            |
@@ -45,12 +49,13 @@ function create_combinations(scheme, c::ComponentPool)
     # since we're iterating the scheme in order, 
     # there is no need to worry about passing the
     # args to the system function in the correct order.
-    for x in scheme
+    for v in scheme
         # If one of these has no components defined for its type,
         # then the overall combination will just be empty,
         # so we might as well just return []
+        x = firstelem(v)
         if c[x] == [] return c[x] end
-        push!(arrs, indexify(c[x]))
+        push!(arrs, indexify.(inferargpairs(c[x])))
     end
     # if arrs is length 1 then a will be returned straight away,
     # so we need each of its elements to be a tuple for compat.
