@@ -3,22 +3,25 @@ Abstract type for all Components
 """
 abstract type Component end
 
-struct ComponentPool 
-    _raw::Dict{Type{<:Component}, Vector{Component}}
-end
-ComponentPool()  = ComponentPool(Dict())
-getindex(c::ComponentPool, t::Type{<:Component}, i::Int) = c._raw[t][i]
-getindex(c::ComponentPool, t::Type{<:Component}) = if t in keys(c._raw) c._raw[t] else Vector() end
-getindex(c::ComponentPool, i::ComponentPoolIndex) = getindex(c, i.type, i.index)
-
 struct ComponentPoolIndex
     type::Type{<:Component}
     index::Int
 end
 ComponentPoolIndex(t::Component, i::Int) = ComponentPoolIndex(typeof(t), i)
 
-tovec(a) = [a]
-tovec(a::Vector) = a
+struct ComponentPool 
+    _raw::Dict{Type{<:Component}, Vector{Component}}
+    _entity::Dict{ComponentPoolIndex, Entity}
+end
+ComponentPool()  = ComponentPool(Dict(), Dict())
+getindex(c::ComponentPool, t::Type{<:Component}, i::Int) = c._raw[t][i]
+getindex(c::ComponentPool, t::Type{<:Component}) = if t in keys(c._raw) c._raw[t] else Vector() end
+getindex(c::ComponentPool, i::ComponentPoolIndex) = getindex(c, i.type, i.index)
+
+struct DistributedComponent 
+    _ops::Vector{Function, Tuple}
+    _index::ComponentPoolIndex
+end
 
 function indexify(v::Vector{Component}) 
     i = 1
@@ -30,6 +33,7 @@ function indexify(v::Vector{Component})
     a
 end
 
+firstelem(a::Any) = try first(a) catch return a end
 #+------------------------------------------------------+
 #| This is the main idea                                |
 #| Combinations are only generated if needed            |
