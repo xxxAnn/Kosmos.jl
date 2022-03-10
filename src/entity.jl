@@ -8,3 +8,11 @@ function Entity!(k::Kosmo, args...)
     end
     Entity(v)
 end
+
+function findcompfroment(e::Entity, x)
+    for ind in e._comps 
+        if ind.type == x
+            return ind
+        end
+    end
+end

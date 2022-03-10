@@ -33,8 +33,12 @@ function indexify(v::Vector{Component})
     a
 end
 
-function inferargpairs(v::Vector{Component}) # -> Vector{Tuple}
-
+function inferargpairs(c::ComponentPool, sch) # -> Vector{Tuple}
+    v = []
+    for el in indexify(c[firstelem(sch)])
+        ent = c._entity[el] 
+        push!(v, Tuple([c[findcompfroment(ent, x)] for x in sch]))
+    end
 end
 
 firstelem(a::Any) = try first(a) catch; return a end
@@ -55,7 +59,9 @@ function create_combinations(scheme, c::ComponentPool)
         # so we might as well just return []
         x = firstelem(v)
         if c[x] == [] return c[x] end
-        push!(arrs, indexify.(inferargpairs(c[x])))
+        if x == v push!(arrs, indexify(c[x])) 
+        else push!(arrs, inferargpairs(c, v)) 
+        end
     end
     # if arrs is length 1 then a will be returned straight away,
     # so we need each of its elements to be a tuple for compat.
