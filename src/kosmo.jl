@@ -1,8 +1,15 @@
+struct System 
+    _f::Function
+    _raw::Vector{Vector{ComponentPoolIndex}}
+    _scheme::Tuple
+end
 struct Kosmo 
     _component_pool::ComponentPool #// Raw components entries
     _system_pool::Vector{System}
 end
 Kosmo() = Kosmo(ComponentPool(), Vector())
+
+ComponentSet(k::Kosmo, v) = ComponentSet(k._component_pool, v)
 
 function run_systems(k::Kosmo) 
     for sys in k._system_pool 
@@ -18,7 +25,7 @@ function add!(k::Kosmo, cmp::Component)
     c = k._component_pool
     TT = typeof(cmp)
     # update system pool
-    for sys in k._cached_dispatch
+    for sys in k._system_pool
         if TT in sys._scheme
             scheme = filter(x-> x!=T, sys._scheme)
             t = create_pair_combinations(create_combinations(scheme, k._component_pool), [cmp])
